@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { initDB } from "./config/db";
 import cors from "cors";
-import { authRoute } from "./modules/auth/auth.route";
+import { authRoute } from "./modules/auth/auth.routes";
 const app = express();
 app.use(cors());
 app.use(express.json());
