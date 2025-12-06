@@ -1,5 +1,14 @@
 import { pool } from "../../config/db";
 
+const getSingleVehicle = async (id: string) => {
+  const result = await pool.query(
+    `
+        SELECT * FROM vehicles WHERE id=$1
+        `,
+    [id]
+  );
+  return result;
+};
 const addVehicle = async (data: Record<string, unknown>) => {
   const {
     vehicle_name,
@@ -40,4 +49,5 @@ export const vehicleServices = {
   addVehicle,
   getVehicles,
   deleteVehicles,
+  getSingleVehicle,
 };
