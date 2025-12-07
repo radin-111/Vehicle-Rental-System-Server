@@ -87,11 +87,18 @@ const updateVehicle = async (req: Request, res: Response) => {
       req.body
     );
 
-    res.status(200).json({
-      success: true,
-      message: "Vehicle updated successfully",
-      data: result.rows[0],
-    });
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: "Vehicle updated successfully",
+        data: result?.rows[0],
+      });
+    } else {
+      res.status(200).json({
+        success: false,
+        message: "Vehicle not found",
+      });
+    }
   } catch (err: any) {
     res.status(500).json({
       success: false,

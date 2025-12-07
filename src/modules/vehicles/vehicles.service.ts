@@ -11,6 +11,11 @@ const updateVehicle = async (
     daily_rent_price,
     availability_status,
   } = vehicleData;
+
+  const vehicle = await pool.query(`SELECT * FROM vehicles WHERE id=$1`,[id])
+  if(vehicle.rows.length===0){
+    return null
+  }
   const result = await pool.query(
     `
     UPDATE vehicles SET vehicle_name=$1,type=$2,registration_number=$3,daily_rent_price=$4,availability_status=$5 WHERE id=$6 RETURNING *

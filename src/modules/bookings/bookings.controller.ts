@@ -1,6 +1,36 @@
 import { Request, Response } from "express";
 import { bookingServices } from "./bookings.service";
-// async(req:Request,res:Response)=>
+
+const updateBooking = async (req: Request, res: Response) => {
+  try {
+    const result = await bookingServices.updateBooking(
+      req.body.status,
+      req.params.bookingId as string
+    );
+
+    if (!result) {
+      res.status(404).json({
+        success: false,
+        message: "Booking not found ",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: `${
+        req.body.status === "returned"
+          ? "Booking marked as returned. Vehicle is now available"
+          : "Booking cancelled successfully"
+      }`,
+      data: result?.rows[0],
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: err.message,
+    });
+  }
+};
 
 const getBookings = async (req: Request, res: Response) => {
   const booking = req.body.booking || "";
@@ -47,4 +77,5 @@ const addBooking = async (req: Request, res: Response) => {
 export const bookingsController = {
   addBooking,
   getBookings,
+  updateBooking,
 };

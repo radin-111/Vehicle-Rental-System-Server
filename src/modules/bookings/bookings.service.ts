@@ -1,18 +1,47 @@
 import { pool } from "../../config/db";
 
-const getBookings = async (booking: any) => {
-    
-  if (!booking) {
-    const result = await pool.query(`SELECT * FROM bookings `
+const updateBooking = async (status: string, id: string) => {
+  const booking = await pool.query(
+    `
+        SELECT * FROM bookings WHERE id=$1
+        `,
+    [id]
+  );
+  if (booking.rows.length === 0) {
+    return null;
+  }
+  const result = await pool.query(
+    `
+    UPDATE bookings SET status=$1 WHERE id=$2 RETURNING *
+    `,
+    [status, id]
+  );
+
+  if (status === "returned") {
+    const updatedVehicle = await pool.query(
+      `UPDATE vehicles SET availability_status=$1 WHERE id=$2 RETURNING *`,
+      ["available", result.rows[0].vehicle_id]
     );
+
+    result.rows[0].vehicle = {
+      availability_status: updatedVehicle.rows[0].availability_status,
+    };
+  }
+
+  return result;
+};
+const getBookings = async (booking: any) => {
+  if (!booking) {
+    const result = await pool.query(`SELECT * FROM bookings `);
 
     return result;
   } else {
     const result = await pool.query(
       `    
     SELECT * FROM bookings WHERE customer_id=$1
-    `
-    ,[booking]);
+    `,
+      [booking]
+    );
 
     return result;
   }
@@ -81,4 +110,5 @@ const addBooking = async (booking: Record<string, any>) => {
 export const bookingServices = {
   addBooking,
   getBookings,
+  updateBooking,
 };
