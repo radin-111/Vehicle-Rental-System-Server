@@ -1,5 +1,31 @@
 import { pool } from "../../config/db";
 
+const updateVehicle = async (
+  id: string,
+  vehicleData: Record<string, unknown>
+) => {
+  const {
+    vehicle_name,
+    type,
+    registration_number,
+    daily_rent_price,
+    availability_status,
+  } = vehicleData;
+  const result = await pool.query(
+    `
+    UPDATE vehicles SET vehicle_name=$1,type=$2,registration_number=$3,daily_rent_price=$5,availability_status=$6 WHERE id=$7
+    `,
+    [
+      vehicle_name,
+      type,
+      registration_number,
+      daily_rent_price,
+      availability_status,
+      id,
+    ]
+  );
+  return result;
+};
 const getSingleVehicle = async (id: string) => {
   const result = await pool.query(
     `
@@ -50,4 +76,5 @@ export const vehicleServices = {
   getVehicles,
   deleteVehicles,
   getSingleVehicle,
+  updateVehicle,
 };

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { vehicleServices } from "./vehicles.service";
-// async (req: Request, res: Response)
 
 const getSingleVehicle = async (req: Request, res: Response) => {
   try {
@@ -80,9 +79,31 @@ const deleteVehicles = async (req: Request, res: Response) => {
     });
   }
 };
+
+const updateVehicle = async (req: Request, res: Response) => {
+  try {
+    const result = await vehicleServices.updateVehicle(
+      req.params.vehicleId as string,
+      req.body
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Vehicle updated successfully",
+      data: result.rows[0],
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      message: "Nothing Changed",
+      error: err.message,
+    });
+  }
+};
 export const vehiclesControllers = {
   addVehicle,
   deleteVehicles,
   getVehicles,
   getSingleVehicle,
+  updateVehicle,
 };
