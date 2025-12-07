@@ -20,7 +20,8 @@ const getSingleVehicle = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message,
+      message: "Something went wrong",
+      error: err.message,
     });
   }
 };
@@ -35,7 +36,8 @@ const addVehicle = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message,
+      message: "Vehicle creation failed",
+      error: err.message,
     });
   }
 };
@@ -55,7 +57,8 @@ const getVehicles = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      message: err.message,
+      message: "Something went wrong",
+      error: err.message,
     });
   }
 };
@@ -72,7 +75,8 @@ const deleteVehicles = async (req: Request, res: Response) => {
   } catch (err: any) {
     res.status(500).json({
       success: true,
-      message: err.message,
+      message: "Something went wrong",
+      error: err.message,
     });
   }
 };
