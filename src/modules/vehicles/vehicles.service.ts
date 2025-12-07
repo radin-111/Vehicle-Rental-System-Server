@@ -13,7 +13,7 @@ const updateVehicle = async (
   } = vehicleData;
   const result = await pool.query(
     `
-    UPDATE vehicles SET vehicle_name=$1,type=$2,registration_number=$3,daily_rent_price=$5,availability_status=$6 WHERE id=$7
+    UPDATE vehicles SET vehicle_name=$1,type=$2,registration_number=$3,daily_rent_price=$4,availability_status=$5 WHERE id=$6 RETURNING *
     `,
     [
       vehicle_name,
